@@ -14,6 +14,7 @@ import (
 const (
 	formatExports = "exports"
 	formatDotenv  = "dotenv"
+	formatDotenvNoQuotes = "dotenvnoquotes"
 )
 
 func main() {
@@ -26,7 +27,7 @@ func main() {
 	format := flag.String("format", formatExports, "output format")
 	flag.Parse()
 
-	if *format == formatExports || *format == formatDotenv {
+	if *format == formatExports || *format == formatDotenv || *format == formatDotenvNoQuotes {
 	} else {
 		log.Fatal("Unsupported format option. Must be 'exports' or 'dotenv'")
 	}
@@ -83,5 +84,7 @@ func OutputParameter(path string, parameter *ssm.Parameter, format string) {
 		fmt.Printf("export %s=$'%s'\n", env, value)
 	case formatDotenv:
 		fmt.Printf("%s=\"%s\"\n", env, value)
+	case formatDotenvNoQuotes:
+		fmt.Printf("%s=%s\n", env, value)
 	}
 }
