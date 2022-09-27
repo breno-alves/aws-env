@@ -1,4 +1,4 @@
-module github.com/breno-alves/aws-env
+module github.com/ramcorp/aws-env
 
 go 1.19
 
