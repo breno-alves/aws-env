@@ -31,7 +31,7 @@ func main() {
 
 	if *format == formatExports || *format == formatDotenv || *format == formatDotenvNoQuotes || *format == formatIgnoreBreakLines {
 	} else {
-		log.Fatal("Unsupported format option. Must be 'exports' or 'dotenv'")
+		log.Fatal("Unsupported format option. Must be 'exports' or 'dotenv' or 'dotenvnoquotes' or 'ignorebreaklines'")
 	}
 
 	sess := CreateSession()
