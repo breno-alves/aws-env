@@ -3,18 +3,20 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/ssm"
 	"log"
 	"os"
 	"strings"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
 const (
-	formatExports = "exports"
-	formatDotenv  = "dotenv"
-	formatDotenvNoQuotes = "dotenvnoquotes"
+	formatExports          = "exports"
+	formatDotenv           = "dotenv"
+	formatDotenvNoQuotes   = "dotenvnoquotes"
+	formatIgnoreBreakLines = "ignorebreaklines"
 )
 
 func main() {
@@ -27,7 +29,7 @@ func main() {
 	format := flag.String("format", formatExports, "output format")
 	flag.Parse()
 
-	if *format == formatExports || *format == formatDotenv || *format == formatDotenvNoQuotes {
+	if *format == formatExports || *format == formatDotenv || *format == formatDotenvNoQuotes || *format == formatIgnoreBreakLines {
 	} else {
 		log.Fatal("Unsupported format option. Must be 'exports' or 'dotenv'")
 	}
@@ -86,5 +88,7 @@ func OutputParameter(path string, parameter *ssm.Parameter, format string) {
 		fmt.Printf("%s=\"%s\"\n", env, value)
 	case formatDotenvNoQuotes:
 		fmt.Printf("%s=%s\n", env, value)
+	case formatIgnoreBreakLines:
+		fmt.Printf("%s=%s ", env, value)
 	}
 }
