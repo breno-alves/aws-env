@@ -17,6 +17,7 @@ const (
 	formatDotenv           = "dotenv"
 	formatDotenvNoQuotes   = "dotenvnoquotes"
 	formatIgnoreBreakLines = "ignorebreaklines"
+	onlyValue              = "onlyvalue"
 )
 
 func main() {
@@ -29,7 +30,7 @@ func main() {
 	format := flag.String("format", formatExports, "output format")
 	flag.Parse()
 
-	if *format == formatExports || *format == formatDotenv || *format == formatDotenvNoQuotes || *format == formatIgnoreBreakLines {
+	if *format == formatExports || *format == formatDotenv || *format == formatDotenvNoQuotes || *format == formatIgnoreBreakLines || *format == onlyValue {
 	} else {
 		log.Fatal("Unsupported format option. Must be 'exports' or 'dotenv' or 'dotenvnoquotes' or 'ignorebreaklines'")
 	}
@@ -79,6 +80,7 @@ func OutputParameter(path string, parameter *ssm.Parameter, format string) {
 	value := *parameter.Value
 
 	env := strings.Replace(strings.Trim(name[len(path):], "/"), "/", "_", -1)
+	rawValue := value
 	value = strings.Replace(value, "\n", "\\n", -1)
 
 	switch format {
@@ -88,7 +90,9 @@ func OutputParameter(path string, parameter *ssm.Parameter, format string) {
 		fmt.Printf("%s=\"%s\"\n", env, value)
 	case formatDotenvNoQuotes:
 		fmt.Printf("%s=%s\n", env, value)
+	case onlyValue:
+		fmt.Printf("%s", value)
 	case formatIgnoreBreakLines:
-		fmt.Printf("%s=%s ", env, value)
+		fmt.Printf("%s=%s\n", env, rawValue)
 	}
 }
